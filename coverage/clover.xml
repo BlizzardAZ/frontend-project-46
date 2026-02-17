@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1771348031016" clover="3.2.0">
-  <project timestamp="1771348031016" name="All files">
+<coverage generated="1771352513745" clover="3.2.0">
+  <project timestamp="1771352513745" name="All files">
     <metrics statements="41" coveredstatements="41" conditionals="32" coveredconditionals="31" methods="6" coveredmethods="6" elements="79" coveredelements="78" complexity="0" loc="41" ncloc="41" packages="1" files="3" classes="3"/>
     <file name="findDifference.js" path="/Users/alina/frontend-project-46/src/findDifference.js">
       <metrics statements="30" coveredstatements="30" conditionals="30" coveredconditionals="30" methods="4" coveredmethods="4"/>
