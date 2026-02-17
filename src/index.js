@@ -1,10 +1,13 @@
-// import { readFileSync } from 'fs';
+// точка входа
+import parseFile from './parse.js'
+import findDiff from './findDifference.js'
 
-// const genDiff = (filepath1, filepath2) => {
-//     const file1 = readFileSync(filepath1, 'utf-8');
-//     const file2 = readFileSync(filepath2, 'utf-8');
+const genDiff = (filepath1, filepath2) => {
+  const obj1 = parseFile(filepath1)
+  const obj2 = parseFile(filepath2)
 
-//     return разницу между file1 и file2
-// }
+  const diff = findDiff(obj1, obj2) // return {}
+  return JSON.stringify(diff, null, 2) // convert {} to JSON str
+}
 
-// export default genDiff;
+export default genDiff

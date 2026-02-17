@@ -1,7 +1,7 @@
 #!/usr/bin/env node
+// CLI точка входа
 import { Command } from 'commander'
-import parseFile from '../src/parse.js'
-import findDiff from '../src/findDifference.js'
+import genDiff from '../src/index.js'
 
 const program = new Command()
 
@@ -11,16 +11,9 @@ program
   .version('1.0.0')
   .arguments('<filepath1> <filepath2>')
   .option('-f, --format [type]', 'output format')
-  .action((filepath1, filepath2) => { // (filepath1, filepath2 options)
-    const obj1 = parseFile(filepath1)
-    // console.log('Из файла gendiff.js: ', obj1);
-    const obj2 = parseFile(filepath2)
-    // console.log('Из файла gendiff.js: ', obj2);
-
-    const resultOfComparison = findDiff(obj1, obj2) // (obj1, obj2, options.format);
-    const resultJsonSring = JSON.stringify(resultOfComparison, null, 2)
-
-    console.log(resultJsonSring)
+  .action((filepath1, filepath2) => { // (filepath1, filepath2, options)
+    const diffStr = genDiff(filepath1, filepath2)
+    console.log(diffStr)
   })
 
 program.parse(process.argv)

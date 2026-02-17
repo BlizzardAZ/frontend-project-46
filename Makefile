@@ -12,3 +12,8 @@ lint: # запуск npx eslint
 
 lintfix: # запуск npx eslint с флагом --fix
 	npx eslint --fix .
+
+test: # запуск тестов
+	npm test
+
+# jest: # запуск jest-теститрования NODE_OPTIONS=--experimental-vm-modules npx jest

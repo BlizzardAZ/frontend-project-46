@@ -2,16 +2,30 @@ import _ from 'lodash'
 
 // (obj1, obj2, options.format)
 const findDiff = (obj1, obj2) => {
-  if (Object.keys(obj1).length === 0 || Object.keys(obj2).length === 0) {
-    return 'Comparison is incorrect'
-  }
+  const result = {}
 
   const obj1Keys = _.sortBy(Object.keys(obj1)) // массив ключей
   const obj2Keys = _.sortBy(Object.keys(obj2)) // массив ключей
 
   const allKeys = _.sortBy(_.union(obj1Keys, obj2Keys))
 
-  const result = {}
+  if (obj1Keys.length === 0 && obj2Keys.length === 0) {
+    return {}
+  }
+
+  if (obj1Keys.length === 0 && obj2Keys.length !== 0) {
+    obj2Keys.forEach((key) => {
+      result[`+ ${key}`] = obj2[key]
+    })
+    return result
+  }
+
+  if (obj1Keys.length !== 0 && obj2Keys.length === 0) {
+    obj1Keys.forEach((key) => {
+      result[`- ${key}`] = obj1[key]
+    })
+    return result
+  }
 
   allKeys.forEach((key) => {
     const hasKey1 = obj1Keys.includes(key)

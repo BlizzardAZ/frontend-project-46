@@ -13,7 +13,7 @@ const parseFile = (filepath) => {
   // console.log('Из файла parse.js: ', fileExt);
 
   if (fileExt === '.json') {
-    return JSON.parse(data) // вернет объект
+    return JSON.parse(data) // вернет объект //НЕПОКРЫТО ТЕСТАМИ!!!
   }
 
   // switch (fileExt) {
