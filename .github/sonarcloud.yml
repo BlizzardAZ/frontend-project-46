@@ -1,27 +1,55 @@
-name: SonarCloud Scan
-on: 
-  push:
-    branches: [ main ]
-
-jobs: 
-  build:
+name: Build
+on:
+ push:
+   branches:
+     - main
+ pull_request:
+   types: [opened, synchronize, reopened]
+jobs:
+  sonarqube:
+    name: SonarQube
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 0 
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run jest coverage tests
+      - name: Test and coverage
         run: npm run test:coverage
-      
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+
+      - name: Sonar Scan
+        uses: SonarSource/sonarqube-scan-action@v7
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: https://sonarcloud.io
-        with:
-          args: >
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+          SONAR_TOKEN: ${{ secrets. SONARCLOUD_TOKEN }}
+
+# name: SonarCloud Scan
+# on: 
+#   push:
+#     branches:
+#       - main 
+
+# jobs: 
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Run jest coverage tests
+#         run: npm run test:coverage
+      
+#       - name: SonarCloud Scan
+#         uses: SonarSource/sonarcloud-github-action@master
+#         env:
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#           SONAR_HOST_URL: https://sonarcloud.io
+#         with:
+#           args: >
+#             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
