@@ -24,6 +24,9 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v7
         env:
           SONAR_TOKEN: ${{ secrets. SONARCLOUD_TOKEN }}
+        args: >
+          -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
+
 
 # name: SonarCloud Scan
 # on: 
