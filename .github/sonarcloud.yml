@@ -20,6 +20,11 @@ jobs:
       - name: Test and coverage
         run: npm run test:coverage
 
+      - name: log
+        run: |
+          ls -l coverage/lcov.info
+          head -n 10 coverage/lcov.info
+
       - name: Sonar Scan
         uses: SonarSource/sonarqube-scan-action@v7
         env:
