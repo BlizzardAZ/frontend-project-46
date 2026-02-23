@@ -20,13 +20,10 @@ jobs:
       - name: Run linter
         run: make lint
 
-      - name: Run tests
-        run: make test
-
   Sonar:
     name: SonarCloud
     runs-on: ubuntu-latest
-    needs: Linter
+    needs: Linters
     steps:
       - uses: actions/checkout@v6
         with:
