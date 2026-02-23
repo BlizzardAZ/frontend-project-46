@@ -1,18 +1,36 @@
-name: Build
+name: Linter check and SonarCloud coverage check
+
 on:
- push:
-   branches:
-     - main
- pull_request:
-   types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
 jobs:
-  sonarqube:
-    name: SonarQube
+  Linter:
+    name: Lint and Test
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run linter
+        run: make lint
+
+      - name: Run tests
+        run: make test
+
+  Sonar:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    needs: Linter
     steps:
       - uses: actions/checkout@v6
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
 
       - name: Install dependencies
         run: npm install
@@ -20,44 +38,45 @@ jobs:
       - name: Test and coverage
         run: npm run test:coverage
 
-      - name: log
-        run: |
-          ls -l coverage/lcov.info
-          head -n 10 coverage/lcov.info
-
       - name: Sonar Scan
         uses: SonarSource/sonarqube-scan-action@v7
         env:
-          SONAR_TOKEN: ${{ secrets. SONARCLOUD_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         args: >
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
 
-# name: SonarCloud Scan
-# on: 
-#   push:
-#     branches:
-#       - main 
 
-# jobs: 
-#   build:
+# name: Build
+# on:
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#    types: [opened, synchronize, reopened]
+# jobs:
+#   sonarqube:
+#     name: SonarQube
 #     runs-on: ubuntu-latest
 #     steps:
-#       - uses: actions/checkout@v4
+#       - uses: actions/checkout@v6
 #         with:
-#           fetch-depth: 0
+#           fetch-depth: 0 
 
 #       - name: Install dependencies
 #         run: npm install
 
-#       - name: Run jest coverage tests
+#       - name: Test and coverage
 #         run: npm run test:coverage
-      
-#       - name: SonarCloud Scan
-#         uses: SonarSource/sonarcloud-github-action@master
+
+#       # - name: Log
+#       #   run: |
+#       #     ls -l coverage/lcov.info
+#       #     head -n 10 coverage/lcov.info
+
+#       - name: Sonar Scan
+#         uses: SonarSource/sonarqube-scan-action@v7
 #         env:
-#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#           SONAR_HOST_URL: https://sonarcloud.io
-#         with:
-#           args: >
-#             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+#           SONAR_TOKEN: ${{ secrets. SONARCLOUD_TOKEN }}
+#         args: >
+#           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
