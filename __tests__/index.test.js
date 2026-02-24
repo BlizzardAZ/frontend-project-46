@@ -1,7 +1,7 @@
 import genDiff from '../src/index.js'
 import * as path from 'node:path'
 import process from 'node:process'
-import { readFileSync } from 'fs'
+import { readFileSync } from 'node:fs'
 // import { strict as assert } from 'node:assert'
 // import assert from 'power-assert'
 
