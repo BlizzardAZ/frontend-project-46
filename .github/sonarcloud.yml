@@ -8,7 +8,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  Linter and SonarCheck:
+  Linter_and_SonarCheck:
     name: Lint, Test, SonarCheck
     runs-on: ubuntu-latest
     steps:
