@@ -48,7 +48,6 @@ const findDiff = (obj1, obj2) => {
       result[`+ ${key}`] = value2
     }
   })
-  // console.log('Из файла findDifference.js: ', result);
   return result
 }
 
