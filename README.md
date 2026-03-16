@@ -12,3 +12,6 @@
 ##### example of "gendiff" package work 
 https://asciinema.org/a/xAHMEfM1jl3tMD5F
 
+##### example of "gendiff -h" work, comparison of two files with common or different extentions ('.json' / '.yaml', '.yml' )
+https://asciinema.org/a/AyqJQs3K97zDWW1g
+

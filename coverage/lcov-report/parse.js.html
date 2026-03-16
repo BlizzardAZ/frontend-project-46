@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>7/8</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -94,33 +94,37 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -128,31 +132,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { readFileSync } from 'fs'
 import * as path from 'node:path'
 import process from 'node:process'
+import yaml from 'js-yaml'
 &nbsp;
 const parseFile = (filepath) =&gt; {
   const absolutePath = path.resolve(process.cwd(), '__fixtures__', filepath)
-  // console.log('Из файла parse.js: ', absolutePath);
 &nbsp;
   const data = readFileSync(absolutePath, 'utf-8') // вернет строку со всем содерж в utf-8
   // console.log('Из файла parse.js: ', data);
 &nbsp;
   const fileExt = path.extname(absolutePath).toLowerCase()
-  // console.log('Из файла parse.js: ', fileExt);
 &nbsp;
-  <span class="missing-if-branch" title="else path not taken" >E</span>if (fileExt === '.json') {
-    return JSON.parse(data) // вернет объект //НЕПОКРЫТО ТЕСТАМИ!!!
+  if (!['.json', '.yaml', '.yml'].includes(fileExt)) {
+    throw new Error(`File extension ${fileExt} is not supported`)
   }
 &nbsp;
-  // switch (fileExt) {
-  //     case '.json':
-  //       return JSON.parse(data); //вернулся обьект с ключ-знаечние
-  //     // case '.yaml':
-  //     //     return yaml.load(data);
-  //     // case '.yml':
-  //     //   return yaml.load(data);
-  //     // default:
-  //     //   throw new Error(`Неподдерживаемый формат файла: ${ext}`);
-  //   }
+  try {
+    if (fileExt === '.json') {
+      return JSON.parse(data)
+    }
+    
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (fileExt === '.yml' || fileExt === '.yaml') {
+      return yaml.load(data)
+    }
+  }
+  catch (e) {
+    console.error('Parsing error', e)
+    throw new Error('Parsing of file ended incorrectly')
+  }
 }
 &nbsp;
 export default parseFile
@@ -163,7 +169,7 @@ export default parseFile
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-02-23T19:55:21.714Z
+                at 2026-03-15T23:47:45.765Z
             </div>
         <script src="prettify.js"></script>
         <script>

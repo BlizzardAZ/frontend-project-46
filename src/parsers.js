@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs'
 import * as path from 'node:path'
 import process from 'node:process'
+import yaml from 'js-yaml'
 
 const parseFile = (filepath) => {
   const absolutePath = path.resolve(process.cwd(), '__fixtures__', filepath)
@@ -10,8 +11,21 @@ const parseFile = (filepath) => {
 
   const fileExt = path.extname(absolutePath).toLowerCase()
 
-  if (fileExt === '.json') {
-    return JSON.parse(data) // вернет объект //НЕПОКРЫТО ТЕСТАМИ!!!
+  if (!['.json', '.yaml', '.yml'].includes(fileExt)) {
+    throw new Error(`File extension ${fileExt} is not supported`)
+  }
+
+  try {
+    if (fileExt === '.json') {
+      return JSON.parse(data)
+    }
+    else if (fileExt === '.yml' || fileExt === '.yaml') {
+      return yaml.load(data)
+    }
+  }
+  catch (e) {
+    console.error('Parsing error', e)
+    throw new Error('Parsing of file ended incorrectly')
   }
 }
 
