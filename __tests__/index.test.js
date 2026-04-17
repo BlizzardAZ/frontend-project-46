@@ -1,128 +1,52 @@
 import genDiff from '../src/index.js'
 import * as path from 'node:path'
 import process from 'node:process'
-import { readFileSync } from 'node:fs'
-import parseFile from '../src/parsers.js'
+import * as fs from 'node:fs'
+import parseFile from '../src/modules/parsers.js'
 import yaml from 'js-yaml'
-// import { strict as assert } from 'node:assert'
-// import assert from 'power-assert'
 
-const fixturePath = filename => path.resolve(process.cwd(), '__fixtures__', filename)
+// Helpers for getting filepath
+const getFixturePath = filename => path.resolve(process.cwd(), '__fixtures__', filename)
+const readFile = filename => fs.readFileSync(getFixturePath(filename), 'utf-8')
 
-test('Compare two JSON files.Main functionality.Positive test', () => {
-  const filePath1 = fixturePath('file1.json')
-  const filePath2 = fixturePath('file2.json')
-  const result = genDiff(filePath1, filePath2)
+// Test data
+const filesForTest = [
+  ['file1.json', 'file2.json', 'expectedOutputPositiveNested.txt'],
+  ['file1.yaml', 'file2.yaml', 'expectedOutputPositiveNested.txt'],
+  ['file1.json', 'file2.yaml', 'expectedOutputPositiveNested.txt'],
+  ['filesEqual1.json', 'filesEqual2.json', 'comparisonResultBothEqual.txt'],
+  ['fileEmpty1.json', 'fileEmpty2.json', 'emptyResult.txt'],
+  ['emptyFile.json', 'plainFile2.json', 'comparisonResultFirstEmptySecondNot.txt'],
+  ['plainFile1.json', 'emptyFile.json', 'comparisonResultFirstNotEmptySecondEmpty.txt'],
+]
 
-  const resultCompareTo = readFileSync(fixturePath('expectedOutputPositive.json'), 'utf-8')
-  expect(result).toEqual(resultCompareTo)
+test.each(filesForTest)('compare files %s and %s, result should be equal %s', (file1, file2, expectedFile) => {
+  const result = genDiff(getFixturePath(file1), getFixturePath(file2))
+  const resultCompareTo = readFile(expectedFile)
+  expect(result).toBe(resultCompareTo.trim())
 })
 
-test('Main functionality.Negative test', () => {
-  const filePath1 = fixturePath('file1.json')
-  const filePath2 = fixturePath('file2.json')
-  const result = genDiff(filePath1, filePath2)
+// Parsers
+const formats = [
+  ['plainFile1.json', JSON.parse],
+  ['plainFile1.yaml', yaml.load],
+]
 
-  const resultCompareTo = readFileSync(fixturePath('expectedOutputNegative.json'), 'utf-8')
+test.each(formats)('parse %s file correctly', (filename, parser) => {
+  const filepath = getFixturePath(filename)
+  const fileContent = readFile(filename)
 
-  expect(result).not.toEqual(resultCompareTo)
+  expect(parseFile(filepath)).toEqual(parser(fileContent))
 })
 
-test('Both files are empty', () => {
-  const filePath1 = fixturePath('fileEmpty1.json')
-  const filePath2 = fixturePath('fileEmpty2.json')
-  const result = genDiff(filePath1, filePath2)
+const unsupportedFilesANdErrors = [
+  ['unsupportedExtFile.txt', 'File extension .txt is not supported'],
+  ['invalidJsonFile.json', 'Parsing of file ended incorrectly'],
+  ['invalidYamlFile.yaml', 'Parsing of file ended incorrectly'],
+]
 
-  expect(result).toEqual('{\n}')
-})
+test.each(unsupportedFilesANdErrors)('parse unsupported extension file %s, throw error', (filename, error) => {
+  const unsupportedData = getFixturePath(filename)
 
-test('First file empty / second not', () => {
-  const filePath1 = fixturePath('fileEmpty1.json')
-  const filePath2 = fixturePath('file2.json')
-  const result = genDiff(filePath1, filePath2)
-
-  const resultCompareTo = readFileSync(fixturePath('comparisonResultFirstEmptySecondNot.json'), 'utf-8')
-
-  // console.log('Result:', result)
-  // console.log('Expected:', resultCompareTo)
-
-  expect(result).toEqual(resultCompareTo)
-})
-
-test('First file not empty / second empty', () => {
-  const filePath1 = fixturePath('file1.json')
-  const filePath2 = fixturePath('fileEmpty2.json')
-  const result = genDiff(filePath1, filePath2)
-
-  const resultCompareTo = readFileSync(fixturePath('comparisonResultFirstNotEmptySecondEmpty.json'), 'utf-8')
-
-  // console.log('Result:', result)
-  // console.log('Expected:', resultCompareTo)
-
-  expect(result).toEqual(resultCompareTo)
-})
-
-test('Both files are equal', () => {
-  const filePath1 = fixturePath('filesEqual1.json')
-  const filePath2 = fixturePath('filesEqual2.json')
-  const result = genDiff(filePath1, filePath2)
-
-  const resultCompareTo = readFileSync(fixturePath('comparisonResultBothEqual.json'), 'utf-8')
-  expect(result).toEqual(resultCompareTo)
-})
-
-test('Compare two YAML files. Main functionality.Positive test', () => {
-  const filePath1 = fixturePath('file1.yaml')
-  const filePath2 = fixturePath('file2.yaml')
-  const result = genDiff(filePath1, filePath2)
-
-  const resultCompareTo = readFileSync(fixturePath('expectedOutputPositive.json'), 'utf-8')
-  expect(result).toEqual(resultCompareTo)
-})
-
-test('Compare two YAML files. Main functionality.Negative test', () => {
-  const filePath1 = fixturePath('file1.yaml')
-  const filePath2 = fixturePath('file2.yaml')
-  const result = genDiff(filePath1, filePath2)
-
-  const resultCompareTo = readFileSync(fixturePath('expectedOutputNegative.json'), 'utf-8')
-  expect(result).not.toEqual(resultCompareTo)
-})
-
-test('Parse JSON file', () => {
-  const filepath = fixturePath('file1.json')
-  const parsedFile = JSON.parse(readFileSync(fixturePath('file1.json'), 'utf-8'))
-
-  expect(parseFile(filepath)).toEqual(parsedFile)
-})
-
-test('Parse YAML file', () => {
-  const filepath = fixturePath('file1.yaml')
-  const parsedFile = yaml.load(readFileSync(fixturePath('file1.yaml'), 'utf-8'))
-
-  expect(parseFile(filepath)).toEqual(parsedFile)
-})
-
-test('Parse file with unsupported ext. Throw error', () => {
-  const unsupportedFilePath = fixturePath('unsupportedExtFile.txt')
-
-  expect(() => {
-    parseFile(unsupportedFilePath)
-  }).toThrow(`File extension .txt is not supported`)
-})
-
-test('Parse invalid JSON file. Throw error', () => {
-  const filepath = fixturePath('invalidJsonFile.json')
-
-  expect(() => {
-    parseFile(filepath)
-  }).toThrow('Parsing of file ended incorrectly')
-})
-
-test('Parse invalid YAML file. Throw error', () => {
-  const filepath = fixturePath('invalidYamlFile.yaml')
-
-  expect(() => {
-    parseFile(filepath)
-  }).toThrow('Parsing of file ended incorrectly')
+  expect(() => parseFile(unsupportedData)).toThrow(error)
 })

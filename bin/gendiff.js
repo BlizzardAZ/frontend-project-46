@@ -11,10 +11,10 @@ program
   .version('1.0.0')
   .arguments('<filepath1> <filepath2>')
   .option('-f, --format <type>', 'output format', 'stylish')
-  .action((filepath1, filepath2) => {
-    // const fileFormat = options.format *дописать  в параметры options, а в парам diffStr fileFormat?
-    const diffStr = genDiff(filepath1, filepath2)
-    console.log(diffStr)
+  .action((filepath1, filepath2, options) => {
+    const fileFormat = options.format
+    const result = genDiff(filepath1, filepath2, fileFormat)
+    console.log(result)
   })
 
 program.parse(process.argv)

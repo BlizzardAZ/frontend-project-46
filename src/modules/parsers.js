@@ -4,7 +4,7 @@ import process from 'node:process'
 import yaml from 'js-yaml'
 
 const parseFile = (filepath) => {
-  const absolutePath = path.resolve(process.cwd(), '__fixtures__', filepath)
+  const absolutePath = path.resolve(process.cwd(), filepath)
 
   const data = readFileSync(absolutePath, 'utf-8') // вернет строку со всем содерж в utf-8
   // console.log('Из файла parse.js: ', data);
@@ -17,14 +17,14 @@ const parseFile = (filepath) => {
 
   try {
     if (fileExt === '.json') {
+      // console.log('PARSED NESTED OBJ: ', JSON.parse(data))
       return JSON.parse(data)
     }
     else if (fileExt === '.yml' || fileExt === '.yaml') {
       return yaml.load(data)
     }
   }
-  catch (e) {
-    console.error('Parsing error', e)
+  catch {
     throw new Error('Parsing of file ended incorrectly')
   }
 }
