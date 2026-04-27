@@ -43,8 +43,8 @@ Parameters:
 
 [Example of "gendiff -h" work, comparison of two files with common or different extentions ('.json' / '.yaml', '.yml')](https://asciinema.org/a/AyqJQs3K97zDWW1g)
 
-[Example of recursive comparison. Example of "Stylish" formatter work](https://asciinema.org/a/aGmLB2dGjMnpctiV)
+[Example of recursive comparison. Example of "stylish" formatter work](https://asciinema.org/a/aGmLB2dGjMnpctiV)
 
-[Example of "Plain" formatter work](https://asciinema.org/a/Cr21L7qGRDNc6DLE)
+[Example of "plain" formatter work](https://asciinema.org/a/Cr21L7qGRDNc6DLE)
 
-
+[Example of "json" formatter work](https://asciinema.org/a/oraX8OZuiW7MdVJ5)
