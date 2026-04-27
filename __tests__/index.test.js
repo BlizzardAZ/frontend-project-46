@@ -11,25 +11,31 @@ const readFile = filename => fs.readFileSync(getFixturePath(filename), 'utf-8')
 
 // Test data
 const filesForTest = [
-  ['file1.json', 'file2.json', 'expectedOutputPositiveNested.txt'],
-  ['file1.yaml', 'file2.yaml', 'expectedOutputPositiveNested.txt'],
-  ['file1.json', 'file2.yaml', 'expectedOutputPositiveNested.txt'],
-  ['filesEqual1.json', 'filesEqual2.json', 'comparisonResultBothEqual.txt'],
-  ['fileEmpty1.json', 'fileEmpty2.json', 'emptyResult.txt'],
-  ['emptyFile.json', 'plainFile2.json', 'comparisonResultFirstEmptySecondNot.txt'],
-  ['plainFile1.json', 'emptyFile.json', 'comparisonResultFirstNotEmptySecondEmpty.txt'],
+  ['file1.json', 'file2.json', 'stylish', 'expectPositiveStylish.txt'],
+  ['file1.yaml', 'file2.yaml', 'stylish', 'expectPositiveStylish.txt'],
+  ['file1.yaml', 'file2.yml', 'stylish', 'expectPositiveStylish.txt'],
+  ['file1.json', 'file2.yaml', 'stylish', 'expectPositiveStylish.txt'],
+  ['filesEqual1.json', 'filesEqual2.json', 'stylish', 'expectBothEqualStylish.txt'],
+  ['fileEmpty1.json', 'fileEmpty2.json', 'stylish', 'expectEmpty.txt'],
+  ['fileEmpty1.json', 'file2.json', 'stylish', 'expectFirstEmptyStylish.txt'],
+  ['file1.json', 'fileEmpty2.json', 'stylish', 'expectSecondEmptyStylish.txt'],
+  ['file1.yaml', 'file2.yml', 'stylish', 'expectPositiveStylish.txt'],
+  ['file1.json', 'file2.json', 'plain', 'expectPlain.txt'],
+  ['file1.yaml', 'file2.yml', 'plain', 'expectPlain.txt'],
+  ['file1.json', 'file2.yaml', 'plain', 'expectPlain.txt'],
 ]
 
-test.each(filesForTest)('compare files %s and %s, result should be equal %s', (file1, file2, expectedFile) => {
-  const result = genDiff(getFixturePath(file1), getFixturePath(file2))
+test.each(filesForTest)('compare files %s and %s, formatter name %s, result should be equal %s', (file1, file2, formatName, expectedFile) => {
+  const result = genDiff(getFixturePath(file1), getFixturePath(file2), formatName)
   const resultCompareTo = readFile(expectedFile)
   expect(result).toBe(resultCompareTo.trim())
 })
 
 // Parsers
 const formats = [
-  ['plainFile1.json', JSON.parse],
-  ['plainFile1.yaml', yaml.load],
+  ['file1.json', JSON.parse],
+  ['file1.yaml', yaml.load],
+  ['file2.yml', yaml.load],
 ]
 
 test.each(formats)('parse %s file correctly', (filename, parser) => {

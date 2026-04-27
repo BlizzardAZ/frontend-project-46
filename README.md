@@ -45,4 +45,6 @@ Parameters:
 
 [Example of recursive comparison. Example of "Stylish" formatter work](https://asciinema.org/a/aGmLB2dGjMnpctiV)
 
+[Example of "Plain" formatter work](https://asciinema.org/a/Cr21L7qGRDNc6DLE)
+
 

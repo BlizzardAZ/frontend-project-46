@@ -12,8 +12,8 @@ program
   .arguments('<filepath1> <filepath2>')
   .option('-f, --format <type>', 'output format', 'stylish')
   .action((filepath1, filepath2, options) => {
-    const fileFormat = options.format
-    const result = genDiff(filepath1, filepath2, fileFormat)
+    const formatName = options.format
+    const result = genDiff(filepath1, filepath2, formatName)
     console.log(result)
   })
 

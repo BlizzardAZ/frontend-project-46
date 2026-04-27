@@ -12,7 +12,9 @@ const formatStylish = (tree) => {
     const currentIndent = space.repeat(indentSize + 4)
     const bracketIndent = space.repeat(indentSize)
 
-    const lines = Object.entries(value).map(
+    const entries = Object.entries(value)
+    const sortedEntries = _.sortBy(entries, ([key]) => key)
+    const lines = sortedEntries.map(
       ([key, val]) => `${currentIndent}${key}: ${stringify(val, depth + 1)}`,
     )
     return ['{', ...lines, `${bracketIndent}}`].join('\n')
