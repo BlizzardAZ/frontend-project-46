@@ -18,7 +18,7 @@
 
 ## Setup
 
-1. `make install` или `npm ci`
+1. `make install` or `npm ci`
 
 2. `npm link`
 

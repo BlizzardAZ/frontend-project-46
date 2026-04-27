@@ -23,6 +23,7 @@ const filesForTest = [
   ['file1.json', 'file2.json', 'plain', 'expectPlain.txt'],
   ['file1.yaml', 'file2.yml', 'plain', 'expectPlain.txt'],
   ['file1.json', 'file2.yaml', 'plain', 'expectPlain.txt'],
+  ['file1.json', 'file2.json', 'json', 'expectJson.json'],
 ]
 
 test.each(filesForTest)('compare files %s and %s, formatter name %s, result should be equal %s', (file1, file2, formatName, expectedFile) => {
