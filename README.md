@@ -1,7 +1,8 @@
-## Hexlet tests and linter status:
+> ### Badges Github Actions:
 [![Actions Status](https://github.com/BlizzardAZ/frontend-project-46/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/BlizzardAZ/frontend-project-46/actions)
+[![LinterСheck_SonarCloudСoverageСheck](https://github.com/BlizzardAZ/frontend-project-46/actions/workflows/sonarcloud.yml/badge.svg)](https://github.com/BlizzardAZ/frontend-project-46/actions/workflows/sonarcloud.yml)
 
-## SonarQube tests and tests-coverage:
+> ### Badges SonarCloud:
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=BlizzardAZ_frontend-project-46&metric=coverage)](https://sonarcloud.io/summary/new_code?id=BlizzardAZ_frontend-project-46)
 [![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=BlizzardAZ_frontend-project-46)](https://sonarcloud.io/summary/new_code?id=BlizzardAZ_frontend-project-46)
 [![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=BlizzardAZ_frontend-project-46)
@@ -45,6 +46,6 @@ Parameters:
 
 [Example of recursive comparison. Example of "stylish" formatter work](https://asciinema.org/a/aGmLB2dGjMnpctiV)
 
-[Example of "plain" formatter work](https://asciinema.org/a/Cr21L7qGRDNc6DLE)
+[Example of "plain" formatter work](https://asciinema.org/a/1us1J0Kw7YLu2Xra)
 
 [Example of "json" formatter work](https://asciinema.org/a/oraX8OZuiW7MdVJ5)
