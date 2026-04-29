@@ -46,14 +46,17 @@ test.each(formats)('parse %s file correctly', (filename, parser) => {
   expect(parseFile(filepath)).toEqual(parser(fileContent))
 })
 
-const unsupportedFilesANdErrors = [
-  ['unsupportedExtFile.txt', 'File extension .txt is not supported'],
-  ['invalidJsonFile.json', 'Parsing of file ended incorrectly'],
-  ['invalidYamlFile.yaml', 'Parsing of file ended incorrectly'],
+test('to throw error for unsupported extension', () => {
+  const path = getFixturePath('unsupportedExtFile.txt')
+  expect(() => parseFile(path)).toThrow('Parsing of file ended incorrectly. File extension .txt is not supported.')
+})
+
+const invalidFiles = [
+  ['invalidJsonFile.json'],
+  ['invalidYamlFile.yaml'],
 ]
 
-test.each(unsupportedFilesANdErrors)('parse unsupported extension file %s, throw error', (filename, error) => {
-  const unsupportedData = getFixturePath(filename)
-
-  expect(() => parseFile(unsupportedData)).toThrow(error)
+test.each(invalidFiles)('to throw error for invalid content in %s', (filename) => {
+  const path = getFixturePath(filename)
+  expect(() => parseFile(path)).toThrow()
 })

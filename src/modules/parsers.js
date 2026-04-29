@@ -1,31 +1,21 @@
-import { readFileSync } from 'fs'
+import { readFileSync } from 'node:fs'
 import * as path from 'node:path'
 import process from 'node:process'
 import yaml from 'js-yaml'
 
 const parseFile = (filepath) => {
   const absolutePath = path.resolve(process.cwd(), filepath)
+  const data = readFileSync(absolutePath, 'utf-8')
+  const fileExtension = path.extname(absolutePath).toLowerCase()
 
-  const data = readFileSync(absolutePath, 'utf-8') // вернет строку со всем содерж в utf-8
-  // console.log('Из файла parse.js: ', data);
-
-  const fileExt = path.extname(absolutePath).toLowerCase()
-
-  if (!['.json', '.yaml', '.yml'].includes(fileExt)) {
-    throw new Error(`File extension ${fileExt} is not supported`)
-  }
-
-  try {
-    if (fileExt === '.json') {
-      // console.log('PARSED NESTED OBJ: ', JSON.parse(data))
+  switch (fileExtension) {
+    case '.json':
       return JSON.parse(data)
-    }
-    else if (fileExt === '.yml' || fileExt === '.yaml') {
+    case '.yml':
+    case '.yaml':
       return yaml.load(data)
-    }
-  }
-  catch {
-    throw new Error('Parsing of file ended incorrectly')
+    default:
+      throw new Error(`Parsing of file ended incorrectly. File extension ${fileExtension} is not supported.`)
   }
 }
 
